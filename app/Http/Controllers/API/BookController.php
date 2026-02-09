@@ -62,6 +62,6 @@ class BookController extends Controller
     {
         $book = Book::find($id);
         $book->delete();
-        return response()->json(null, 204);
+        return response()->noContent();
     }
 }
