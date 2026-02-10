@@ -14,12 +14,12 @@ Route::get('/ping', function () {
 });
 
 Route::get('/books', [BookController::class, 'index']);
-Route::get('/books/{id}', [BookController::class, 'show']);
+Route::get('/books/{book}', [BookController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/books', [BookController::class, 'store']);
-    Route::match(['patch', 'put'], '/books/{id}', [BookController::class, 'update']);
-    Route::delete('/books/{id}', [BookController::class, 'destroy']);
+    Route::match(['patch', 'put'], '/books/{book}', [BookController::class, 'update']);
+    Route::delete('/books/{book}', [BookController::class, 'destroy']);
 });
 
 Route::group(['prefix' => 'users'], function () {

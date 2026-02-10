@@ -35,22 +35,21 @@ class BookController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Book $book)
     {
-        return new BookResource(Cache::remember("book:$id", 60, fn() => Book::find($id)));
+        return new BookResource(Cache::remember("book:{$book->id}", 60, fn() => Book::find($book->id)));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Book $book)
     {
-        $book = Book::findOrFail($id);
         $validated = $request->validate([
             'title' => 'required|string|min:3|max:255',
             'author' => 'required|string|min:3|max:100',
             'summary' => 'required|string|min:10|max:500',
-            'isbn' => 'required|string|size:13|unique:books,isbn,' . $id,
+            'isbn' => 'required|string|size:13|unique:books,isbn,' . $book->id,
         ]);
         $book->update($validated);
         return new BookResource($book);
@@ -59,9 +58,8 @@ class BookController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Book $book)
     {
-        $book = Book::find($id);
         $book->delete();
         return response()->noContent();
     }
