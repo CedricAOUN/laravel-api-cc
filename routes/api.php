@@ -13,7 +13,13 @@ Route::get('/ping', function () {
     return response()->json(['message' => 'pong']);
 });
 
-Route::apiResource('books', BookController::class)->middleware('auth:sanctum');
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/books', [BookController::class, 'index']);
+    Route::post('/books', [BookController::class, 'store']);
+    Route::get('/books/{id}', [BookController::class, 'show']);
+    Route::put('/books/{id}', [BookController::class, 'update']);
+    Route::delete('/books/{id}', [BookController::class, 'destroy']);
+});
 
 Route::group(['prefix' => 'users'], function () {
     Route::post('/register', [UserController::class, 'register']);

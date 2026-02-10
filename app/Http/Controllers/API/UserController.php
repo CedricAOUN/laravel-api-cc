@@ -20,7 +20,7 @@ class UserController extends Controller
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => bcrypt($validated['password']),
+            'password' => Hash::make($validated['password']),
         ]);
         return response()->json(['message' => 'User registered successfully', 'user' => $user], 201);
     }
