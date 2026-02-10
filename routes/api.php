@@ -15,8 +15,7 @@ Route::get('/ping', function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/books', [BookController::class, 'store']);
-    Route::put('/books/{id}', [BookController::class, 'update']);
-    Route::patch('/books/{id}', [BookController::class, 'update']);
+    Route::match(['patch', 'put'], '/books/{id}', [BookController::class, 'update']);
     Route::delete('/books/{id}', [BookController::class, 'destroy']);
 });
 
