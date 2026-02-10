@@ -13,6 +13,9 @@ Route::get('/ping', function () {
     return response()->json(['message' => 'pong']);
 });
 
+Route::get('/books', [BookController::class, 'index']);
+Route::get('/books/{id}', [BookController::class, 'show']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/books', [BookController::class, 'store']);
     Route::match(['patch', 'put'], '/books/{id}', [BookController::class, 'update']);
@@ -21,6 +24,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::group(['prefix' => 'users'], function () {
     Route::post('/register', [UserController::class, 'register']);
-    Route::post('/login', [UserController::class, 'login']);
+    Route::middleware('throttle:10,1')->post('/login', [UserController::class, 'login']);
     Route::middleware('auth:sanctum')->post('/logout', [UserController::class, 'logout']);
 });
