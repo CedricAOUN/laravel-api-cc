@@ -19,9 +19,8 @@ class UserController extends Controller
         requestBody: new OA\RequestBody(ref: '#/components/requestBodies/UserRegistration'),
         responses: [
             new OA\Response(response: 201, description: 'User created successfully', content: new OA\JsonContent(ref: '#/components/schemas/UserRegisterResponse')),
-            new OA\Response(response: 422, description: 'Validation Error', content: new OA\JsonContent(ref: '#/components/schemas/GenericMessage')),
-            new OA\Response(response: 409, description: 'Conflict - User already exists', content: new OA\JsonContent(ref: '#/components/schemas/GenericMessage')),
-            new OA\Response(response: 500, description: 'Server Error', content: new OA\JsonContent(ref: '#/components/schemas/GenericMessage')),
+            new OA\Response(response: 422, description: 'Validation Error', content: new OA\JsonContent(ref: '#/components/schemas/ValidationErrorMessage')),
+            new OA\Response(response: 409, description: 'Conflict - User already exists', content: new OA\JsonContent(ref: '#/components/schemas/AlreadyExistsMessage')),
         ]
     )]
     function register(Request $request)
@@ -53,7 +52,8 @@ class UserController extends Controller
         requestBody: new OA\RequestBody(ref: '#/components/requestBodies/UserLogin'),
         responses: [
             new OA\Response(response: 200, description: 'User logged in successfully', content: new OA\JsonContent(ref: '#/components/schemas/UserLoginResponse')),
-            new OA\Response(response: 422, description: 'Validation Error', content: new OA\JsonContent(ref: '#/components/schemas/GenericMessage')),
+            new OA\Response(response: 401, description: 'Invalid credentials', content: new OA\JsonContent(ref: '#/components/schemas/InvalidCredentialsMessage')),
+            new OA\Response(response: 422, description: 'Validation Error', content: new OA\JsonContent(ref: '#/components/schemas/ValidationErrorMessage')),
         ]
     )]
     function login(Request $request)
@@ -84,8 +84,8 @@ class UserController extends Controller
         security: [['BearerAuth' => []]],
         parameters: [new OA\Parameter(ref: '#/components/parameters/AcceptJson'), new OA\Parameter(ref: '#/components/parameters/AuthToken')],
         responses: [
-            new OA\Response(response: 201, description: 'User logged out successfully', content: new OA\JsonContent(ref: '#/components/schemas/GenericMessage')),
-            new OA\Response(response: 401, description: 'Unauthorised', content: new OA\JsonContent(ref: '#/components/schemas/GenericMessage')),
+            new OA\Response(response: 201, description: 'User logged out successfully', content: new OA\JsonContent(ref: '#/components/schemas/LogoutSuccessMessage')),
+            new OA\Response(response: 401, description: 'Unauthenticated', content: new OA\JsonContent(ref: '#/components/schemas/UnauthenticatedMessage')),
         ]
     )]
     function logout(Request $request)

@@ -23,7 +23,6 @@ class BookController extends Controller
                 description: 'List of books',
                 content: new OA\JsonContent(ref: '#/components/schemas/BookListWithPagination')
             ),
-            new OA\Response(response: 404, description: 'Not found', content: new OA\JsonContent(ref: '#/components/schemas/GenericMessage')),
         ]
     )]
     public function index()
@@ -40,9 +39,8 @@ class BookController extends Controller
         requestBody: new OA\RequestBody(ref: '#/components/requestBodies/Book'),
         responses: [
             new OA\Response(response: 201, description: 'Book created successfully', content: new OA\JsonContent(ref: '#/components/schemas/BookResponse')),
-            new OA\Response(response: 422, description: 'Validation Error', content: new OA\JsonContent(ref: '#/components/schemas/GenericMessage')),
-            new OA\Response(response: 401, description: 'Unauthorized', content: new OA\JsonContent(ref: '#/components/schemas/GenericMessage')),
-            new OA\Response(response: 404, description: 'Not found', content: new OA\JsonContent(ref: '#/components/schemas/GenericMessage')),
+            new OA\Response(response: 422, description: 'Validation Error', content: new OA\JsonContent(ref: '#/components/schemas/ValidationErrorMessage')),
+            new OA\Response(response: 401, description: 'Unauthenticated', content: new OA\JsonContent(ref: '#/components/schemas/UnauthenticatedMessage')),
         ]
     )]
     public function store(Request $request)
@@ -66,7 +64,7 @@ class BookController extends Controller
         ],
         responses: [
             new OA\Response(response: 200, description: 'Book created successfully', content: new OA\JsonContent(ref: '#/components/schemas/BookResponse')),
-            new OA\Response(response: 404, description: 'Not found', content: new OA\JsonContent(ref: '#/components/schemas/GenericMessage')),
+            new OA\Response(response: 404, description: 'Not found', content: new OA\JsonContent(ref: '#/components/schemas/NotFoundMessage')),
         ]
     )]
     public function show(Book $book)
@@ -87,8 +85,8 @@ class BookController extends Controller
         requestBody: new OA\RequestBody(ref: '#/components/requestBodies/Book'),
         responses: [
             new OA\Response(response: 200, description: 'Book updated successfully', content: new OA\JsonContent(ref: '#/components/schemas/BookResponse')),
-            new OA\Response(response: 422, description: 'Validation Error', content: new OA\JsonContent(ref: '#/components/schemas/GenericMessage')),
-            new OA\Response(response: 401, description: 'Unauthorized', content: new OA\JsonContent(ref: '#/components/schemas/GenericMessage')),
+            new OA\Response(response: 422, description: 'Validation Error', content: new OA\JsonContent(ref: '#/components/schemas/ValidationErrorMessage')),
+            new OA\Response(response: 401, description: 'Unauthenticated', content: new OA\JsonContent(ref: '#/components/schemas/UnauthenticatedMessage')),
         ]
     )]
     public function update(Request $request, Book $book)
@@ -115,7 +113,7 @@ class BookController extends Controller
         ],
         responses: [
             new OA\Response(response: 204, description: 'Book deleted successfully'),
-            new OA\Response(response: 401, description: 'Unauthorized', content: new OA\JsonContent(ref: '#/components/schemas/GenericMessage')),
+            new OA\Response(response: 401, description: 'Unauthenticated', content: new OA\JsonContent(ref: '#/components/schemas/UnauthenticatedMessage')),
         ]
     )]
     public function destroy(Book $book)

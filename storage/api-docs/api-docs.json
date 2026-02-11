@@ -33,16 +33,6 @@
                                 }
                             }
                         }
-                    },
-                    "404": {
-                        "description": "Not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/GenericMessage"
-                                }
-                            }
-                        }
                     }
                 }
             },
@@ -78,27 +68,17 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/GenericMessage"
+                                    "$ref": "#/components/schemas/ValidationErrorMessage"
                                 }
                             }
                         }
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "Unauthenticated",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/GenericMessage"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/GenericMessage"
+                                    "$ref": "#/components/schemas/UnauthenticatedMessage"
                                 }
                             }
                         }
@@ -141,7 +121,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/GenericMessage"
+                                    "$ref": "#/components/schemas/NotFoundMessage"
                                 }
                             }
                         }
@@ -183,17 +163,17 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/GenericMessage"
+                                    "$ref": "#/components/schemas/ValidationErrorMessage"
                                 }
                             }
                         }
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "Unauthenticated",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/GenericMessage"
+                                    "$ref": "#/components/schemas/UnauthenticatedMessage"
                                 }
                             }
                         }
@@ -226,11 +206,11 @@
                         "description": "Book deleted successfully"
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "Unauthenticated",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/GenericMessage"
+                                    "$ref": "#/components/schemas/UnauthenticatedMessage"
                                 }
                             }
                         }
@@ -273,7 +253,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/GenericMessage"
+                                    "$ref": "#/components/schemas/ValidationErrorMessage"
                                 }
                             }
                         }
@@ -283,17 +263,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/GenericMessage"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/GenericMessage"
+                                    "$ref": "#/components/schemas/AlreadyExistsMessage"
                                 }
                             }
                         }
@@ -326,12 +296,22 @@
                             }
                         }
                     },
+                    "401": {
+                        "description": "Invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InvalidCredentialsMessage"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Validation Error",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/GenericMessage"
+                                    "$ref": "#/components/schemas/ValidationErrorMessage"
                                 }
                             }
                         }
@@ -359,17 +339,17 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/GenericMessage"
+                                    "$ref": "#/components/schemas/LogoutSuccessMessage"
                                 }
                             }
                         }
                     },
                     "401": {
-                        "description": "Unauthorised",
+                        "description": "Unauthenticated",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/GenericMessage"
+                                    "$ref": "#/components/schemas/UnauthenticatedMessage"
                                 }
                             }
                         }
@@ -403,7 +383,21 @@
                         "type": "string",
                         "example": "1234567890123"
                     },
-                    "links": {
+                    "_links": {
+                        "properties": {
+                            "self": {
+                                "type": "string",
+                                "example": "http://localhost:8000/api/v1/books/1"
+                            },
+                            "update": {
+                                "type": "string",
+                                "example": "http://localhost:8000/api/v1/books/1"
+                            },
+                            "delete": {
+                                "type": "string",
+                                "example": "http://localhost:8000/api/v1/books/1"
+                            }
+                        },
                         "type": "object"
                     }
                 },
@@ -418,9 +412,81 @@
                         }
                     },
                     "links": {
+                        "properties": {
+                            "first": {
+                                "type": "string",
+                                "example": "http://localhost:8000/api/v1/books?page=1"
+                            },
+                            "last": {
+                                "type": "string",
+                                "example": "http://localhost:8000/api/v1/books?page=10"
+                            },
+                            "prev": {
+                                "type": "string",
+                                "example": "http://localhost:8000/api/v1/books?page=1"
+                            },
+                            "next": {
+                                "type": "string",
+                                "example": "http://localhost:8000/api/v1/books?page=3"
+                            }
+                        },
                         "type": "object"
                     },
                     "meta": {
+                        "properties": {
+                            "current_page": {
+                                "type": "integer",
+                                "example": 2
+                            },
+                            "from": {
+                                "type": "integer",
+                                "example": 11
+                            },
+                            "last_page": {
+                                "type": "integer",
+                                "example": 10
+                            },
+                            "path": {
+                                "type": "string",
+                                "example": "http://localhost:8000/api/v1/books"
+                            },
+                            "per_page": {
+                                "type": "integer",
+                                "example": 10
+                            },
+                            "to": {
+                                "type": "integer",
+                                "example": 20
+                            },
+                            "total": {
+                                "type": "integer",
+                                "example": 100
+                            },
+                            "links": {
+                                "type": "array",
+                                "items": {
+                                    "properties": {
+                                        "url": {
+                                            "type": "string",
+                                            "example": "http://localhost:8000/api/v1/books?page=1"
+                                        },
+                                        "label": {
+                                            "type": "string",
+                                            "example": "&laquo; Previous"
+                                        },
+                                        "active": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "page": {
+                                            "type": "integer",
+                                            "example": 3
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
                         "type": "object"
                     }
                 },
@@ -431,6 +497,93 @@
                     "message": {
                         "type": "string",
                         "example": "Generic response message"
+                    }
+                },
+                "type": "object"
+            },
+            "UnauthenticatedMessage": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Unauthenticated"
+                    }
+                },
+                "type": "object"
+            },
+            "NoContentMessage": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "No content"
+                    }
+                },
+                "type": "object"
+            },
+            "InvalidCredentialsMessage": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Invalid credentials"
+                    }
+                },
+                "type": "object"
+            },
+            "AlreadyExistsMessage": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "The email has already been taken"
+                    },
+                    "errors": {
+                        "properties": {
+                            "email": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "example": "The email has already been taken"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "ValidationErrorMessage": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Validation error"
+                    },
+                    "errors": {
+                        "properties": {
+                            "field_name": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "example": "Error message for the field"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "LogoutSuccessMessage": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "User logged out successfully"
+                    }
+                },
+                "type": "object"
+            },
+            "NotFoundMessage": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Not found"
                     }
                 },
                 "type": "object"
@@ -451,6 +604,11 @@
                         "example": "2024-01-01T00:00:00Z"
                     },
                     "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-01T00:00:00Z"
+                    },
+                    "email_verified_at": {
                         "type": "string",
                         "format": "date-time",
                         "example": "2024-01-01T00:00:00Z"
@@ -479,7 +637,7 @@
                     "user": {
                         "$ref": "#/components/schemas/UserResponse"
                     },
-                    "token": {
+                    "access_token": {
                         "type": "string",
                         "example": "{token}"
                     }
