@@ -2,10 +2,17 @@
     "openapi": "3.0.0",
     "info": {
         "title": "My First API",
+        "description": "API de gestion de livres",
         "version": "0.1"
     },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api/v1",
+            "description": "API URL"
+        }
+    ],
     "paths": {
-        "/api/v1/books": {
+        "/books": {
             "get": {
                 "tags": [
                     "Books"
@@ -18,10 +25,24 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "List of books"
+                        "description": "List of books",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BookListWithPagination"
+                                }
+                            }
+                        }
                     },
                     "404": {
-                        "description": "Not found"
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenericMessage"
+                                }
+                            }
+                        }
                     }
                 }
             },
@@ -33,6 +54,9 @@
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/AcceptJson"
+                    },
+                    {
+                        "$ref": "#/components/parameters/AuthToken"
                     }
                 ],
                 "requestBody": {
@@ -40,16 +64,44 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Book created successfully"
+                        "description": "Book created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BookResponse"
+                                }
+                            }
+                        }
                     },
                     "422": {
-                        "description": "Validation Error"
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenericMessage"
+                                }
+                            }
+                        }
                     },
                     "401": {
-                        "description": "Unauthorized"
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenericMessage"
+                                }
+                            }
+                        }
                     },
                     "404": {
-                        "description": "Not found"
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenericMessage"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -59,7 +111,7 @@
                 ]
             }
         },
-        "/api/v1/books/{id}": {
+        "/books/{id}": {
             "get": {
                 "tags": [
                     "Books"
@@ -75,10 +127,24 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Book created successfully"
+                        "description": "Book created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BookResponse"
+                                }
+                            }
+                        }
                     },
                     "404": {
-                        "description": "Not found"
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenericMessage"
+                                }
+                            }
+                        }
                     }
                 }
             },
@@ -93,6 +159,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/BookId"
+                    },
+                    {
+                        "$ref": "#/components/parameters/AuthToken"
                     }
                 ],
                 "requestBody": {
@@ -100,13 +169,34 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Book updated successfully"
+                        "description": "Book updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BookResponse"
+                                }
+                            }
+                        }
                     },
                     "422": {
-                        "description": "Validation Error"
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenericMessage"
+                                }
+                            }
+                        }
                     },
                     "401": {
-                        "description": "Unauthorized"
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenericMessage"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -126,6 +216,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/BookId"
+                    },
+                    {
+                        "$ref": "#/components/parameters/AuthToken"
                     }
                 ],
                 "responses": {
@@ -133,7 +226,14 @@
                         "description": "Book deleted successfully"
                     },
                     "401": {
-                        "description": "Unauthorized"
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenericMessage"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -143,7 +243,7 @@
                 ]
             }
         },
-        "/api/v1/users/register": {
+        "/users/register": {
             "post": {
                 "tags": [
                     "Users"
@@ -159,21 +259,49 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "User created successfully"
+                        "description": "User created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserRegisterResponse"
+                                }
+                            }
+                        }
                     },
                     "422": {
-                        "description": "Validation Error"
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenericMessage"
+                                }
+                            }
+                        }
                     },
                     "409": {
-                        "description": "Conflict - User already exists"
+                        "description": "Conflict - User already exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenericMessage"
+                                }
+                            }
+                        }
                     },
                     "500": {
-                        "description": "Server Error"
+                        "description": "Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenericMessage"
+                                }
+                            }
+                        }
                     }
                 }
             }
         },
-        "/api/v1/users/login": {
+        "/users/login": {
             "post": {
                 "tags": [
                     "Users"
@@ -189,15 +317,29 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "User logged in successfully"
+                        "description": "User logged in successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserLoginResponse"
+                                }
+                            }
+                        }
                     },
                     "422": {
-                        "description": "Validation Error"
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenericMessage"
+                                }
+                            }
+                        }
                     }
                 }
             }
         },
-        "/api/v1/users/logout": {
+        "/users/logout": {
             "post": {
                 "tags": [
                     "Users"
@@ -206,14 +348,31 @@
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/AcceptJson"
+                    },
+                    {
+                        "$ref": "#/components/parameters/AuthToken"
                     }
                 ],
                 "responses": {
                     "201": {
-                        "description": "User logged out successfully"
+                        "description": "User logged out successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenericMessage"
+                                }
+                            }
+                        }
                     },
                     "401": {
-                        "description": "Unauthorised"
+                        "description": "Unauthorised",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenericMessage"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -225,6 +384,109 @@
         }
     },
     "components": {
+        "schemas": {
+            "BookResponse": {
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "example": "Test book"
+                    },
+                    "author": {
+                        "type": "string",
+                        "example": "Test author"
+                    },
+                    "summary": {
+                        "type": "string",
+                        "example": "Test summary of the book"
+                    },
+                    "isbn": {
+                        "type": "string",
+                        "example": "1234567890123"
+                    },
+                    "links": {
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "BookListWithPagination": {
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/BookResponse"
+                        }
+                    },
+                    "links": {
+                        "type": "object"
+                    },
+                    "meta": {
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "GenericMessage": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Generic response message"
+                    }
+                },
+                "type": "object"
+            },
+            "UserResponse": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Test name"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "test2@example.com"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-01T00:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-01T00:00:00Z"
+                    },
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            },
+            "UserRegisterResponse": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "User registered successfully"
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/UserResponse"
+                    }
+                },
+                "type": "object"
+            },
+            "UserLoginResponse": {
+                "properties": {
+                    "user": {
+                        "$ref": "#/components/schemas/UserResponse"
+                    },
+                    "token": {
+                        "type": "string",
+                        "example": "{token}"
+                    }
+                },
+                "type": "object"
+            }
+        },
         "parameters": {
             "AcceptJson": {
                 "name": "Accept",
@@ -233,6 +495,16 @@
                 "schema": {
                     "type": "string",
                     "default": "application/json"
+                }
+            },
+            "AuthToken": {
+                "name": "Authorization",
+                "in": "header",
+                "description": "Bearer token for authentication",
+                "required": true,
+                "schema": {
+                    "type": "string",
+                    "example": "Bearer {token}"
                 }
             },
             "BookId": {

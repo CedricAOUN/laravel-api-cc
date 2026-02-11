@@ -5,27 +5,13 @@ namespace App\Http\Controllers;
 use OpenApi\Annotations\JsonContent;
 use OpenApi\Attributes as OA;
 
-#[OA\Info(title: 'My First API', version: '0.1')]
-#[OA\Parameter(
-    parameter: 'AcceptJson',
-    name: 'Accept',
-    in: 'header',
-    required: true,
-    schema: new OA\Schema(type: 'string', default: 'application/json')
-)]
+#[OA\Info(title: 'My First API', version: '0.1', description: 'API de gestion de livres')]
+#[OA\Server(url: 'http://localhost:8000/api/v1', description: 'API URL')]
 #[OA\SecurityScheme(
     securityScheme: 'BearerAuth',
     type: 'http',
     scheme: 'bearer',
     bearerFormat: 'JWT'
-)]
-#[OA\Parameter(
-    parameter: 'BookId',
-    name: 'id',
-    in: 'path',
-    required: true,
-    description: 'Book ID',
-    schema: new OA\Schema(type: 'integer')
 )]
 #[OA\RequestBody(
     request: 'Book',
