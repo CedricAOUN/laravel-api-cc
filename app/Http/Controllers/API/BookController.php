@@ -8,19 +8,39 @@ use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
+use OpenApi\Attributes as OA;
+
 class BookController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    #[OA\Get(
+        path: '/api/v1/books',
+        operationId: 'getBooks',
+        tags: ['Books'],
+        parameters: [new OA\Parameter(ref: '#/components/parameters/AcceptJson')],
+        responses: [
+            new OA\Response(response: 200, description: 'List of books'),
+            new OA\Response(response: 404, description: 'Not found'),
+        ]
+    )]
     public function index()
     {
         return BookResource::collection(Book::paginate(2));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    #[OA\Post(
+        path: '/api/v1/books',
+        operationId: 'createBook',
+        tags: ['Books'],
+        security: [['BearerAuth' => []]],
+        parameters: [new OA\Parameter(ref: '#/components/parameters/AcceptJson')],
+        requestBody: new OA\RequestBody(ref: '#/components/requestBodies/Book'),
+        responses: [
+            new OA\Response(response: 201, description: 'Book created successfully'),
+            new OA\Response(response: 422, description: 'Validation Error'),
+            new OA\Response(response: 401, description: 'Unauthorized'),
+            new OA\Response(response: 404, description: 'Not found'),
+        ]
+    )]
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -32,17 +52,40 @@ class BookController extends Controller
         return new BookResource(Book::create($validated));
     }
 
-    /**
-     * Display the specified resource.
-     */
+    #[OA\Get(
+        path: '/api/v1/books/{id}',
+        operationId: 'getSingleBook',
+        tags: ['Books'],
+        parameters: [
+            new OA\Parameter(ref: '#/components/parameters/AcceptJson'),
+            new OA\Parameter(ref: '#/components/parameters/BookId'),
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'Book created successfully'),
+            new OA\Response(response: 404, description: 'Not found'),
+        ]
+    )]
     public function show(Book $book)
     {
         return new BookResource(Cache::remember("book:{$book->id}", 60, fn() => Book::find($book->id)));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    #[OA\Put(
+        path: '/api/v1/books/{id}',
+        operationId: 'updateBook',
+        tags: ['Books'],
+        security: [['BearerAuth' => []]],
+        parameters: [
+            new OA\Parameter(ref: '#/components/parameters/AcceptJson'),
+            new OA\Parameter(ref: '#/components/parameters/BookId'),
+        ],
+        requestBody: new OA\RequestBody(ref: '#/components/requestBodies/Book'),
+        responses: [
+            new OA\Response(response: 200, description: 'Book updated successfully'),
+            new OA\Response(response: 422, description: 'Validation Error'),
+            new OA\Response(response: 401, description: 'Unauthorized'),
+        ]
+    )]
     public function update(Request $request, Book $book)
     {
         $validated = $request->validate([
@@ -55,9 +98,20 @@ class BookController extends Controller
         return new BookResource($book);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    #[OA\Delete(
+        path: '/api/v1/books/{id}',
+        operationId: 'deleteBook',
+        tags: ['Books'],
+        security: [['BearerAuth' => []]],
+        parameters: [
+            new OA\Parameter(ref: '#/components/parameters/AcceptJson'),
+            new OA\Parameter(ref: '#/components/parameters/BookId'),
+        ],
+        responses: [
+            new OA\Response(response: 204, description: 'Book deleted successfully'),
+            new OA\Response(response: 401, description: 'Unauthorized'),
+        ]
+    )]
     public function destroy(Book $book)
     {
         $book->delete();

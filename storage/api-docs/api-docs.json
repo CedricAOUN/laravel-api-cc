@@ -1,0 +1,340 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "My First API",
+        "version": "0.1"
+    },
+    "paths": {
+        "/api/v1/books": {
+            "get": {
+                "tags": [
+                    "Books"
+                ],
+                "operationId": "getBooks",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/AcceptJson"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of books"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Books"
+                ],
+                "operationId": "createBook",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/AcceptJson"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/Book"
+                },
+                "responses": {
+                    "201": {
+                        "description": "Book created successfully"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/books/{id}": {
+            "get": {
+                "tags": [
+                    "Books"
+                ],
+                "operationId": "getSingleBook",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/AcceptJson"
+                    },
+                    {
+                        "$ref": "#/components/parameters/BookId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Book created successfully"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Books"
+                ],
+                "operationId": "updateBook",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/AcceptJson"
+                    },
+                    {
+                        "$ref": "#/components/parameters/BookId"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/Book"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Book updated successfully"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Books"
+                ],
+                "operationId": "deleteBook",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/AcceptJson"
+                    },
+                    {
+                        "$ref": "#/components/parameters/BookId"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Book deleted successfully"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users/register": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "operationId": "registerUser",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/AcceptJson"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/UserRegistration"
+                },
+                "responses": {
+                    "201": {
+                        "description": "User created successfully"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    },
+                    "409": {
+                        "description": "Conflict - User already exists"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/login": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "operationId": "loginUser",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/AcceptJson"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/UserLogin"
+                },
+                "responses": {
+                    "200": {
+                        "description": "User logged in successfully"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/logout": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "operationId": "logoutUser",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/AcceptJson"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "User logged out successfully"
+                    },
+                    "401": {
+                        "description": "Unauthorised"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "parameters": {
+            "AcceptJson": {
+                "name": "Accept",
+                "in": "header",
+                "required": true,
+                "schema": {
+                    "type": "string",
+                    "default": "application/json"
+                }
+            },
+            "BookId": {
+                "name": "id",
+                "in": "path",
+                "description": "Book ID",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            }
+        },
+        "requestBodies": {
+            "Book": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "title": {
+                                    "type": "string",
+                                    "example": "Test book"
+                                },
+                                "author": {
+                                    "type": "string",
+                                    "example": "Test author"
+                                },
+                                "summary": {
+                                    "type": "string",
+                                    "example": "Test summary of the book"
+                                },
+                                "isbn": {
+                                    "type": "string",
+                                    "example": "1234567890123"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "UserRegistration": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "example": "Test name"
+                                },
+                                "email": {
+                                    "type": "string",
+                                    "example": "test2@example.com"
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "example": "password"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "UserLogin": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "email": {
+                                    "type": "string",
+                                    "example": "test2@example.com"
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "example": "password"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Books",
+            "description": "Books"
+        },
+        {
+            "name": "Users",
+            "description": "Users"
+        }
+    ]
+}
