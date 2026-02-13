@@ -7,7 +7,6 @@ use App\Http\Resources\BookResource;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-
 use OpenApi\Attributes as OA;
 
 class BookController extends Controller
@@ -51,6 +50,7 @@ class BookController extends Controller
             'summary' => 'required|string|min:10|max:500',
             'isbn' => 'required|string|size:13|unique:books,isbn',
         ]);
+
         return new BookResource(Book::create($validated));
     }
 
@@ -69,7 +69,7 @@ class BookController extends Controller
     )]
     public function show(Book $book)
     {
-        return new BookResource(Cache::remember("book:{$book->id}", 60, fn() => Book::find($book->id)));
+        return new BookResource(Cache::remember("book:{$book->id}", 60, fn () => Book::find($book->id)));
     }
 
     #[OA\Put(
@@ -95,9 +95,10 @@ class BookController extends Controller
             'title' => 'required|string|min:3|max:255',
             'author' => 'required|string|min:3|max:100',
             'summary' => 'required|string|min:10|max:500',
-            'isbn' => 'required|string|size:13|unique:books,isbn,' . $book->id,
+            'isbn' => 'required|string|size:13|unique:books,isbn,'.$book->id,
         ]);
         $book->update($validated);
+
         return new BookResource($book);
     }
 
@@ -119,6 +120,7 @@ class BookController extends Controller
     public function destroy(Book $book)
     {
         $book->delete();
+
         return response()->noContent();
     }
 }

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
 use OpenApi\Attributes as OA;
 
 class UserController extends Controller
@@ -23,7 +22,7 @@ class UserController extends Controller
             new OA\Response(response: 409, description: 'Conflict - User already exists', content: new OA\JsonContent(ref: '#/components/schemas/AlreadyExistsMessage')),
         ]
     )]
-    function register(Request $request)
+    public function register(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -41,6 +40,7 @@ class UserController extends Controller
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
         ]);
+
         return response()->json(['message' => 'User registered successfully', 'user' => $user], 201);
     }
 
@@ -56,7 +56,7 @@ class UserController extends Controller
             new OA\Response(response: 422, description: 'Validation Error', content: new OA\JsonContent(ref: '#/components/schemas/ValidationErrorMessage')),
         ]
     )]
-    function login(Request $request)
+    public function login(Request $request)
     {
         $validated = $request->validate([
             'email' => 'required|email|max:255',
@@ -65,7 +65,7 @@ class UserController extends Controller
 
         $user = User::where('email', $validated['email'])->first();
 
-        if (!$user || !Hash::check($validated['password'], $user->password)) {
+        if (! $user || ! Hash::check($validated['password'], $user->password)) {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
@@ -88,9 +88,10 @@ class UserController extends Controller
             new OA\Response(response: 401, description: 'Unauthenticated', content: new OA\JsonContent(ref: '#/components/schemas/UnauthenticatedMessage')),
         ]
     )]
-    function logout(Request $request)
+    public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
-        return response()->json(['message' => "Logged out successfully"]);
+
+        return response()->json(['message' => 'Logged out successfully']);
     }
 }

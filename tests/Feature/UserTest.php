@@ -3,8 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class UserTest extends TestCase
@@ -24,6 +22,7 @@ class UserTest extends TestCase
         $user = new User(['email' => 'john@company.com']);
         $this->assertTrue($user->usesProfessionalEmail());
     }
+
     public function test_user_uses_personal_email(): void
     {
         $user = new User(['email' => 'john@gmail.com']);

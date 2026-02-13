@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use OpenApi\Annotations\JsonContent;
 use OpenApi\Attributes as OA;
 
 #[OA\Info(title: 'My First API', version: '0.1', description: 'API de gestion de livres')]
