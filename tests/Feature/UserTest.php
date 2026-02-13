@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class UserTest extends TestCase
 {
-    use RefreshDatabase;
     /**
      * A basic feature test example.
      */
@@ -22,12 +21,12 @@ class UserTest extends TestCase
 
     public function test_user_uses_professional_email(): void
     {
-        $user = User::factory()->create(['email' => 'john@company.com']);
+        $user = new User(['email' => 'john@company.com']);
         $this->assertTrue($user->usesProfessionalEmail());
     }
     public function test_user_uses_personal_email(): void
     {
-        $user = User::factory()->create(['email' => 'john@gmail.com']);
+        $user = new User(['email' => 'john@gmail.com']);
         $this->assertFalse($user->usesProfessionalEmail());
     }
 }
